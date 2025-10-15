@@ -2,10 +2,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import "./ComingSoon.css"; // optional styling
 
 function ComingSoon() {
-  const launchDate = new Date("2025-10-20T23:59:59");
 
   // ✅ Memoize the function to prevent it from being redefined on every render
   const calculateTimeLeft = useCallback(() => {
+    const launchDate = new Date("2025-10-20T23:59:59");
     const now = new Date();
     const difference = launchDate - now;
 
