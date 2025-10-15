@@ -32,7 +32,7 @@ jobs:
           target: "/var/www/html"
 
       - name: Restart NGINX
-        uses: appleboy/ssh-action@v1.6.0
+        uses: appleboy/ssh-action@v0.1.7
         with:
           api-key: ${{ secrets.HOSTINGER_API_KEY }}
           virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
