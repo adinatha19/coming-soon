@@ -20,6 +20,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           source: "build/*"             # Adjust to your build folder
           target: "/var/www/html"       # Adjust to your NGINX root
+          
+      - name: List build directory files
+        run: ls -al build
 
       - name: Deploy to Hostinger
         uses: hostinger/deploy-on-vps@v1
