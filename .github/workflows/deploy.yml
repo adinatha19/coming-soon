@@ -1,27 +1,41 @@
-name: Deploy to Hostinger
+name: Deploy to Hostinger VPS
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main  # Trigger on push to main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Upload files to Hostinger VM
+      - name: Set up Node.js (if applicable)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # Change if needed
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build  # Adjust for your build command
+
+      - name: Copy files to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           api-key: ${{ secrets.HOSTINGER_API_KEY }}
           virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
-          source: "build/*"             # Adjust to your build folder
-          target: "/var/www/html"       # Adjust to your NGINX root
+          source: "build/*"
+          target: "/var/www/html"
 
-      - name: Deploy to Hostinger
-        uses: hostinger/deploy-action@v1
+      - name: Restart NGINX
+        uses: appleboy/ssh-action@v1.6.0
         with:
           api-key: ${{ secrets.HOSTINGER_API_KEY }}
           virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
+          script: |
+            sudo systemctl reload nginx
+
