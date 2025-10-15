@@ -47,6 +47,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           passphrase: ${{ secrets.VPS_PASSPHRASE }}
           source: "build/*"
+          strip_components: 1
           target: "/var/www/html"
           overwrite: true
           
