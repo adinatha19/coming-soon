@@ -1,0 +1,27 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Upload files to Hostinger VM
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          api-key: ${{ secrets.HOSTINGER_API_KEY }}
+          virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
+          source: "build/*"             # Adjust to your build folder
+          target: "/var/www/html"       # Adjust to your NGINX root
+
+      - name: Deploy to Hostinger
+        uses: hostinger/deploy-action@v1
+        with:
+          api-key: ${{ secrets.HOSTINGER_API_KEY }}
+          virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
