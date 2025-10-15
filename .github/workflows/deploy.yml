@@ -1,0 +1,46 @@
+name: Build and Deploy to Hostinger VPS
+
+on:
+  push:
+    branches:
+      - main  # Deploy when changes are pushed to main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # Or whatever version your project uses
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: List build files (for debugging)
+        run: ls -la build  # Or dist, if your build folder is named differently
+
+      - name: Upload files to Hostinger VPS
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "build/*"  # Adjust if your build folder is named differently
+          target: "/var/www/html"
+
+      - name: Restart NGINX (optional)
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            sudo systemctl reload nginx
