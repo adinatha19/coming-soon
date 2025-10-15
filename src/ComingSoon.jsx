@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import "./ComingSoon.css"; // optional styling
+import "./ComingSoon.css";
 
 function ComingSoon() {
-
-  // ✅ Memoize the function to prevent it from being redefined on every render
   const calculateTimeLeft = useCallback(() => {
-    const launchDate = new Date("2025-10-20T23:59:59");
+    const launchDate = new Date("2025-10-20T23:59:59"); // ✅ defined here
     const now = new Date();
     const difference = launchDate - now;
 
@@ -17,7 +15,7 @@ function ComingSoon() {
       minutes: Math.floor((difference / (1000 * 60)) % 60),
       seconds: Math.floor((difference / 1000) % 60),
     };
-  }, [launchDate]);
+  }, []); // ✅ no launchDate dependency
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
@@ -27,7 +25,7 @@ function ComingSoon() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [calculateTimeLeft]); // ✅ No warning now
+  }, [calculateTimeLeft]);
 
   if (!timeLeft) {
     return <h1>🎉 We're Live!</h1>;
