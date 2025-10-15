@@ -33,8 +33,8 @@ function ComingSoon() {
 
   return (
     <div className="coming-soon-container">
-      <h1>🚧🚧 Coming Soon 🚧🚧</h1>
-      <p>We're launching something amazing. Stay tuned!!!!</p>
+      <h1>🚧 Coming Soon 🚧</h1>
+      <p>We're launching something amazing. Stay tuned!!</p>
       <div className="countdown">
         <div><span>{timeLeft.days}</span><span>Days</span></div>
         <div><span>{timeLeft.hours}</span><span>Hours</span></div>
